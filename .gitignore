@@ -1,8 +1,16 @@
 HELP.md
+_HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+### Temporary files ###
+*.swp
+*.swo
+*.tmp
+*.log
+.DS_Store
 
 ### STS ###
 .apt_generated
@@ -14,7 +22,7 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
