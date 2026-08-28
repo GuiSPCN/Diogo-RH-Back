@@ -102,12 +102,10 @@ public class FuncionarioEntity {
         this.status = status;
     }
 }
-// id
-// nome
-// email
-// telefone
-// cargo
-// departamento
-// salario
-// cidade
-// status
+// O atributo status poderá assumir valores como: EM_ANALISE, APROVADO,
+// REPROVADO e
+// CONTRATADO.Você poderá
+// criar outros
+// atributos caso
+// considere necessário
+// .
