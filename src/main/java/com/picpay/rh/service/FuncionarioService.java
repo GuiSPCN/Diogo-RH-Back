@@ -6,33 +6,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FuncionarioService {
 
-    private final ArrayList<FuncionarioEntity> funcionarios = new ArrayList<>();
+    private final List<FuncionarioEntity> funcionarios = new ArrayList<>();
 
-    private Integer proximoId = 0;
+    private Integer proximoId = 1;
 
     public FuncionarioEntity cadastrar(FuncionarioEntity funcionario) {
 
-        if (funcionario.getNome() == null || funcionario.getNome().isBlank()) {
-            throw new IllegalArgumentException("O nome é obrigatório.");
-        }
+        validarFuncionario(funcionario);
 
-        if (funcionario.getEmail() == null || funcionario.getEmail().isBlank()) {
-            throw new IllegalArgumentException("O e-mail é obrigatório.");
-        }
-
-        if (funcionario.getCargo() == null || funcionario.getCargo().isBlank()) {
-            throw new IllegalArgumentException("O cargo é obrigatório.");
-        }
-
-        funcionario.setId(Integer.valueOf((int) proximoId++));
+        funcionario.setId(proximoId++);
 
         if (funcionario.getStatus() == null) {
-            funcionario.setStatus(StatusFuncionario.EM_ANALISE);
+            funcionario.setStatus(StatusFuncionario.EM_ANALISE.name());
         }
 
         funcionarios.add(funcionario);
@@ -52,24 +41,13 @@ public class FuncionarioService {
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado."));
     }
 
-    public FuncionarioEntity atualizar(Long id, FuncionarioEntity dadosAtualizados) {
+    public FuncionarioEntity atualizar(
+            Long id,
+            FuncionarioEntity dadosAtualizados) {
 
         FuncionarioEntity funcionario = buscarPorId(id);
 
-        if (dadosAtualizados.getNome() == null ||
-                dadosAtualizados.getNome().isBlank()) {
-            throw new IllegalArgumentException("O nome é obrigatório.");
-        }
-
-        if (dadosAtualizados.getEmail() == null ||
-                dadosAtualizados.getEmail().isBlank()) {
-            throw new IllegalArgumentException("O e-mail é obrigatório.");
-        }
-
-        if (dadosAtualizados.getCargo() == null ||
-                dadosAtualizados.getCargo().isBlank()) {
-            throw new IllegalArgumentException("O cargo é obrigatório.");
-        }
+        validarFuncionario(dadosAtualizados);
 
         funcionario.setNome(dadosAtualizados.getNome());
         funcionario.setEmail(dadosAtualizados.getEmail());
@@ -78,20 +56,25 @@ public class FuncionarioService {
         funcionario.setDepartamento(dadosAtualizados.getDepartamento());
         funcionario.setSalario(dadosAtualizados.getSalario());
         funcionario.setCidade(dadosAtualizados.getCidade());
-        funcionario.setStatus(dadosAtualizados.getStatus());
+
+        if (dadosAtualizados.getStatus() != null) {
+            funcionario.setStatus(dadosAtualizados.getStatus());
+        }
 
         return funcionario;
     }
 
-    public FuncionarioEntity atualizarParcial(Long id, FuncionarioEntity dados) {
+    public FuncionarioEntity atualizarParcial(
+            Long id,
+            FuncionarioEntity dados) {
 
         FuncionarioEntity funcionario = buscarPorId(id);
 
-        if (dados.getNome() != null) {
+        if (dados.getNome() != null && !dados.getNome().isBlank()) {
             funcionario.setNome(dados.getNome());
         }
 
-        if (dados.getEmail() != null) {
+        if (dados.getEmail() != null && !dados.getEmail().isBlank()) {
             funcionario.setEmail(dados.getEmail());
         }
 
@@ -99,7 +82,7 @@ public class FuncionarioService {
             funcionario.setTelefone(dados.getTelefone());
         }
 
-        if (dados.getCargo() != null) {
+        if (dados.getCargo() != null && !dados.getCargo().isBlank()) {
             funcionario.setCargo(dados.getCargo());
         }
 
@@ -153,11 +136,34 @@ public class FuncionarioService {
                         ||
 
                         funcionario.getStatus()
-                                .nome()
                                 .toLowerCase()
                                 .contains(pesquisa)
 
                 )
                 .toList();
+    }
+
+    private void validarFuncionario(FuncionarioEntity funcionario) {
+
+        if (funcionario.getNome() == null ||
+                funcionario.getNome().isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "O nome é obrigatório.");
+        }
+
+        if (funcionario.getEmail() == null ||
+                funcionario.getEmail().isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "O e-mail é obrigatório.");
+        }
+
+        if (funcionario.getCargo() == null ||
+                funcionario.getCargo().isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "O cargo é obrigatório.");
+        }
     }
 }
