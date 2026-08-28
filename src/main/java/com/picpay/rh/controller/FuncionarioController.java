@@ -2,16 +2,24 @@ package com.picpay.rh.controller;
 
 import com.picpay.rh.entity.FuncionarioEntity;
 import com.picpay.rh.service.FuncionarioService;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/funcionarios")
-@CrossOrigin(origins = "*")
 public class FuncionarioController {
 
     private final FuncionarioService funcionarioService;
@@ -20,129 +28,45 @@ public class FuncionarioController {
         this.funcionarioService = funcionarioService;
     }
 
-    // Cadastrar funcionário
     @PostMapping
-    public ResponseEntity<?> cadastrar(
-            @RequestBody FuncionarioEntity funcionario) {
-
-        try {
-
-            FuncionarioEntity novoFuncionario = funcionarioService.cadastrar(funcionario);
-
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(novoFuncionario);
-
-        } catch (IllegalArgumentException e) {
-
-            return ResponseEntity
-                    .badRequest()
-                    .body(e.getMessage());
-        }
+    public ResponseEntity<FuncionarioEntity> cadastrar(@RequestBody FuncionarioEntity funcionario) {
+        FuncionarioEntity criado = funcionarioService.cadastrar(funcionario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(criado);
     }
 
-    // Listar todos os funcionários
     @GetMapping
     public ResponseEntity<List<FuncionarioEntity>> listarTodos() {
-
-        return ResponseEntity.ok(
-                funcionarioService.listarTodos());
+        return ResponseEntity.ok(funcionarioService.listarTodos());
     }
 
-    // Buscar funcionário por ID
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarPorId(
-            @PathVariable Long id) {
-
-        try {
-
-            FuncionarioEntity funcionario = funcionarioService.buscarPorId(id);
-
-            return ResponseEntity.ok(funcionario);
-
-        } catch (RuntimeException e) {
-
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-        }
+    public ResponseEntity<FuncionarioEntity> buscarPorId(@PathVariable Integer id) {
+        return ResponseEntity.ok(funcionarioService.buscarPorId(id));
     }
 
-    // Atualização completa
     @PutMapping("/{id}")
-    public ResponseEntity<?> atualizar(
-            @PathVariable Long id,
+    public ResponseEntity<FuncionarioEntity> atualizar(
+            @PathVariable Integer id,
             @RequestBody FuncionarioEntity funcionario) {
-
-        try {
-
-            FuncionarioEntity atualizado = funcionarioService.atualizar(
-                    id,
-                    funcionario);
-
-            return ResponseEntity.ok(atualizado);
-
-        } catch (IllegalArgumentException e) {
-
-            return ResponseEntity
-                    .badRequest()
-                    .body(e.getMessage());
-
-        } catch (RuntimeException e) {
-
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-        }
+        return ResponseEntity.ok(funcionarioService.atualizar(id, funcionario));
     }
 
-    // Atualização parcial
     @PatchMapping("/{id}")
-    public ResponseEntity<?> atualizarParcial(
-            @PathVariable Long id,
-            @RequestBody FuncionarioEntity funcionario) {
-
-        try {
-
-            FuncionarioEntity atualizado = funcionarioService.atualizarParcial(
-                    id,
-                    funcionario);
-
-            return ResponseEntity.ok(atualizado);
-
-        } catch (RuntimeException e) {
-
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-        }
+    public ResponseEntity<FuncionarioEntity> atualizarParcial(
+            @PathVariable Integer id,
+            @RequestBody Map<String, Object> alteracoes) {
+        return ResponseEntity.ok(funcionarioService.atualizarParcial(id, alteracoes));
     }
 
-    // Excluir funcionário
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> excluir(
-            @PathVariable Long id) {
-
-        try {
-
-            funcionarioService.excluir(id);
-
-            return ResponseEntity.noContent().build();
-
-        } catch (RuntimeException e) {
-
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-        }
+    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
+        funcionarioService.excluir(id);
+        return ResponseEntity.noContent().build();
     }
 
-    // Pesquisar por nome, cargo ou status
     @GetMapping("/pesquisar")
     public ResponseEntity<List<FuncionarioEntity>> pesquisar(
-            @RequestParam String termo) {
-
-        return ResponseEntity.ok(
-                funcionarioService.pesquisar(termo));
+            @RequestParam(defaultValue = "") String termo) {
+        return ResponseEntity.ok(funcionarioService.pesquisar(termo));
     }
 }
