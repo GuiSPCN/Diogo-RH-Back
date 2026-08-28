@@ -9,16 +9,13 @@ public class FuncionarioEntity {
     private String departamento;
     private Double salario;
     private String cidade;
-    private String status;
-    // O atributo status poderá assumir valores como: EM_ANALISE, APROVADO,
-    // REPROVADO e
-    // CONTRATADO. Você poderá criar outros atributos caso considere necessário.
+    private StatusFuncionario status;
 
     public FuncionarioEntity() {
     }
 
-    public FuncionarioEntity(Integer id, String nome, String email, String telefone, String cargo, String departamento,
-            Double salario, String cidade, String status) {
+    public FuncionarioEntity(Integer id, String nome, String email, String telefone, String cargo,
+            String departamento, Double salario, String cidade, StatusFuncionario status) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -94,18 +91,11 @@ public class FuncionarioEntity {
         this.cidade = cidade;
     }
 
-    public String getStatus() {
+    public StatusFuncionario getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusFuncionario status) {
         this.status = status;
     }
 }
-// O atributo status poderá assumir valores como: EM_ANALISE, APROVADO,
-// REPROVADO e
-// CONTRATADO.Você poderá
-// criar outros
-// atributos caso
-// considere necessário
-// .
