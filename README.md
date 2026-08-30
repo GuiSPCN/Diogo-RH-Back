@@ -214,3 +214,6 @@ src/
 - não existe upload de currículo;
 - não existe histórico persistente das requisições;
 - o projeto foi deliberadamente mantido simples para demonstrar conceitos HTTP e atender ao desafio acadêmico.
+
+## Acesso ao repositório front-end
+Link do repositório: https://github.com/GuiSPCN/Diogo-RH-Front
