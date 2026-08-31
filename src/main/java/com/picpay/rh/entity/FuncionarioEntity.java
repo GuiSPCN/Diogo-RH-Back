@@ -14,8 +14,8 @@ public class FuncionarioEntity {
     public FuncionarioEntity() {
     }
 
-    public FuncionarioEntity(Integer id, String nome, String email, String telefone, String cargo,
-            String departamento, Double salario, String cidade, StatusFuncionario status) {
+    public FuncionarioEntity(Integer id, String nome, String email, String telefone, String cargo, String departamento,
+            Double salario, String cidade, StatusFuncionario status) {
         this.id = id;
         this.nome = nome;
         this.email = email;
